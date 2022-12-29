@@ -95,14 +95,14 @@ const Products = () => {
 
   return (
     <div className="container mx-auto mt-20">
-      <div className="flex items-start ">
+      <div className="flex items-start gap-x-5 ">
         <div
           className={`boloc ${
-            showFilter ? "translate-x-0" : "-translate-x-[250px]"
-          } bg-white tran lg:translate-x-0  w-[250px] z-10 lg:p-0 py-10 px-5`}
+            showFilter ? "translate-x-[0px]" : "-translate-x-[250px]"
+          } w-full max-w-[250px] lg:translate-x-[0px] bg-white  px-5 z-[100] tran`}
         >
           <span
-            className="absolute top-5 right-5 block lg:hidden cursor-pointer hover:text-green-400"
+            className="absolute top-5 right-5 block lg:hidden  cursor-pointer hover:text-green-400"
             onClick={() => setShowFilter(false)}
           >
             <svg
@@ -124,7 +124,7 @@ const Products = () => {
           <FilterSize onchange={handleFilterSize}></FilterSize>
           <FilterColor onchange={handleFilterColor}></FilterColor>
         </div>
-        <div className="w-full flex-1">
+        <div className="w-full">
           <div className="flex items-center justify-between mb-10">
             <button
               onClick={() => setShowFilter(!showFilter)}
@@ -132,29 +132,6 @@ const Products = () => {
             >
               bộ lọc
             </button>
-
-            <div className="sort border border-gray-400">
-              <button
-                onClick={() => handleSort("desc")}
-                className={`px-4 py-2 ${
-                  filters.time === "desc"
-                    ? "bg-green-400  text-white"
-                    : "bg-white text-black"
-                } `}
-              >
-                giá tăng dần
-              </button>
-              <button
-                onClick={() => handleSort("ASC")}
-                className={`px-4 py-2 ${
-                  filters.time === "ASC"
-                    ? "bg-green-400  text-white"
-                    : "bg-white text-black"
-                }`}
-              >
-                giá giảm dần
-              </button>
-            </div>
           </div>
           {loading ? (
             <div className="w-10 h-10 animate-spin mx-auto mt-5 border-8 border-green-500 border-t-transparent rounded-full"></div>

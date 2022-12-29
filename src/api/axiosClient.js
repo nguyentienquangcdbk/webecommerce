@@ -2,7 +2,7 @@ import axios from "axios";
 
 const getToken = () => localStorage.getItem("token");
 const axiosClient = axios.create({
-  baseURL: "http://127.0.0.1:8000/api/",
+  baseURL: "http://103.82.27.248/api/",
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",

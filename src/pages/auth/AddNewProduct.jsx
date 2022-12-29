@@ -17,18 +17,17 @@ import categoryApi from "../../api/categoryApi";
 Quill.register("modules/imageUploader", ImageUploader);
 
 const colourOptions = [
-  { value: "ocean", label: "Ocean", color: "#00B8D9" },
-  { value: "blue", label: "Blue", color: "#0052CC" },
-  { value: "purple", label: "Purple", color: "#5243AA" },
-  { value: "red", label: "Red", color: "#FF5630" },
-  { value: "orange", label: "Orange", color: "#FF8B00" },
-  { value: "yellow", label: "Yellow", color: "#FFC400" },
-  { value: "green", label: "Green", color: "#36B37E" },
-  { value: "forest", label: "Forest", color: "#00875A" },
-  { value: "slate", label: "Slate", color: "#253858" },
-  { value: "silver", label: "Silver", color: "#666666" },
-  { value: "black", label: "Silver", color: "#000" },
-  { value: "white", label: "white", color: "#fff" },
+  { value: "đen", label: "đen" },
+  { value: "xanh lá", label: "xanh lá" },
+  { value: " tím", label: " tím" },
+  { value: "đỏ", label: "đỏ" },
+  { value: "cam", label: "cam" },
+  { value: "vàng", label: "vàng" },
+  { value: "trắng", label: "trắng" },
+  { value: "hồng", label: "hồng" },
+  { value: " nâu", label: " nâu" },
+  { value: "xám", label: "xám" },
+  { value: "xanh da trời", label: "xanh da trời" },
 ];
 const sizeOptions = [
   { value: "37", label: "37" },
@@ -101,10 +100,11 @@ const AddNewProduct = () => {
           bodyFormData.append("file", file);
           const response = await axios({
             method: "post",
-            url: "http://127.0.0.1:8000/api/img/upload",
+            url: "http://103.82.27.248/api/img/upload",
             data: bodyFormData,
             headers: {
               "Content-Type": "multipart/form-data",
+              Accept: "application/json",
             },
           });
           return URLS + response?.data.file_path;
@@ -150,7 +150,7 @@ const AddNewProduct = () => {
         const data = new FormData();
         data.append("file", image);
         const img = await axios.post(
-          "http://127.0.0.1:8000/api/img/upload",
+          "http://103.82.27.248/api/img/upload",
           data
         );
         console.log(img);
@@ -166,7 +166,7 @@ const AddNewProduct = () => {
 
         const imgDes = await axios({
           method: "post",
-          url: "http://127.0.0.1:8000/api/img/uploads",
+          url: "http://103.82.27.248/api/img/uploads",
           data: data,
           headers: {
             "Content-Type": "multipart/form-data",
@@ -271,7 +271,6 @@ const AddNewProduct = () => {
             <Select
               onChange={(x) => setValue("categoryName", x.value)}
               className="mt-5"
-              closeMenuOnSelect={false}
               placeholder="nhà sản xuất"
               options={category}
             />

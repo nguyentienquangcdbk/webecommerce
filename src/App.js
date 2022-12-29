@@ -20,6 +20,7 @@ import { useCart } from "./store/cart";
 import CheackOut from "./pages/CheackOut";
 import OrderAuth from "./pages/auth/order/OrderAuth";
 import DetailOrder from "./pages/auth/order/DetailOrder";
+import HomeAdmin from "./pages/auth/HomeAdmin";
 function App() {
   const user = useStore((state) => state.user);
   const setUser = useStore((state) => state.setUser);
@@ -59,7 +60,7 @@ function App() {
           <Route path="/checkout" element={<CheackOut></CheackOut>}></Route>
         </Route>
         <Route element={<AdminLayout></AdminLayout>}>
-          <Route path="/admin" />
+          <Route path="/admin" element={<HomeAdmin></HomeAdmin>} />
           <Route path="/admin/product" element={<ListProduct></ListProduct>} />
           <Route path="/admin/order" element={<OrderAuth></OrderAuth>} />
           <Route

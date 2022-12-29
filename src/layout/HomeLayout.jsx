@@ -34,12 +34,11 @@ const HomeLayout = () => {
   const setProduct = productStore((state) => state.setProduct);
   const setItemCart = useCart((state) => state.setItemCart);
   const itemCart = useCart((state) => state.itemCart);
-  // const Cart = useCart((state) => state.Cart);
 
   const handleLogOut = async () => {
     await axios({
       method: "post",
-      url: "http://127.0.0.1:8000/api/logout",
+      url: "http://103.82.27.248/api/logout",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -195,6 +194,7 @@ const HomeLayout = () => {
           </div>
         </div>
       </header>
+
       <Outlet></Outlet>
 
       <div className="bg-gray-100">

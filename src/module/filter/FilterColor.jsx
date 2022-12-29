@@ -1,38 +1,17 @@
 import React, { useEffect, useState } from "react";
 import CheckBox from "../../component/CheckBox";
 const listColor = [
-  {
-    label: "trắng",
-    value: "white",
-  },
-  {
-    label: "vàng",
-    value: "yellow",
-  },
-  {
-    label: "đen",
-    value: "black",
-  },
-  {
-    label: "đỏ",
-    value: "red",
-  },
-  {
-    label: "xanh lá",
-    value: "green",
-  },
-  {
-    label: "tím",
-    value: "violet",
-  },
-  {
-    label: "cam",
-    value: "orange",
-  },
-  {
-    label: "xanh nước biển",
-    value: "blue",
-  },
+  { value: "đen", label: "đen" },
+  { value: "xanh lá", label: "xanh lá" },
+  { value: " tím", label: " tím" },
+  { value: "đỏ", label: "đỏ" },
+  { value: "cam", label: "cam" },
+  { value: "vàng", label: "vàng" },
+  { value: "trắng", label: "trắng" },
+  { value: "hồng", label: "hồng" },
+  { value: " nâu", label: " nâu" },
+  { value: "xám", label: "xám" },
+  { value: "xanh da trời", label: "xanh da trời" },
 ];
 const FilterColor = ({ filter, onchange = () => {} }) => {
   const [colors, setColors] = useState([]);

@@ -8,7 +8,7 @@
   }
 }
 @mixin tablet() {
-  @media only screen and (min-width: 840px) {
+  @media only screen and (max-width: 1024px) {
     @content;
   }
 }
@@ -30,7 +30,7 @@ html {
   transition: all 0.5s;
   @include mobile {
     position: absolute;
-    top: 110%;
+    top: 99%;
     left: 50%;
     transform: translateX(-50%);
     flex-direction: column;
@@ -54,7 +54,7 @@ html {
   }
 }
 .boloc {
-  @include mobile {
+  @include tablet {
     position: fixed;
     top: 0;
     left: 0;
@@ -71,7 +71,7 @@ html {
   border-top-right-radius: 5px;
 }
 .css-scroll-x::-webkit-scrollbar {
-  // width: 4px;
+  width: 0px;
   height: 8px;
   background: #ffffff;
 }

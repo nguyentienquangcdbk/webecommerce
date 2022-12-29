@@ -13,20 +13,20 @@ import categoryApi from "../../api/categoryApi";
 import productAPi from "../../api/productAPi";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import imageApi from "../../api/imageApi";
 
 const colourOptions = [
-  { value: "ocean", label: "Ocean", color: "#00B8D9" },
-  { value: "blue", label: "Blue", color: "#0052CC" },
-  { value: "purple", label: "Purple", color: "#5243AA" },
-  { value: "red", label: "Red", color: "#FF5630" },
-  { value: "orange", label: "Orange", color: "#FF8B00" },
-  { value: "yellow", label: "Yellow", color: "#FFC400" },
-  { value: "green", label: "Green", color: "#36B37E" },
-  { value: "forest", label: "Forest", color: "#00875A" },
-  { value: "slate", label: "Slate", color: "#253858" },
-  { value: "silver", label: "Silver", color: "#666666" },
-  { value: "black", label: "Silver", color: "#000" },
-  { value: "white", label: "white", color: "#fff" },
+  { value: "đen", label: "đen" },
+  { value: "xanh lá", label: "xanh lá" },
+  { value: " tím", label: " tím" },
+  { value: "đỏ", label: "đỏ" },
+  { value: "cam", label: "cam" },
+  { value: "vàng", label: "vàng" },
+  { value: "trắng", label: "trắng" },
+  { value: "hồng", label: "hồng" },
+  { value: " nâu", label: " nâu" },
+  { value: "xám", label: "xám" },
+  { value: "xanh da trời", label: "xanh da trời" },
 ];
 const sizeOptions = [
   { value: "37", label: "37" },
@@ -38,12 +38,21 @@ const sizeOptions = [
   { value: "43", label: "43" },
   { value: "44", label: "44" },
 ];
+const schema = yup.object({
+  name: yup.string().required("bạn chưa nhập trường này"),
+  price: yup
+    .number("bạn nhập sai giá tiền")
+    .integer("nhập giá tiền")
+    .required("bạn chưa nhập trường này"),
+});
 
 const EditProduct = () => {
   const params = useParams();
-  const { id } = params;
+  // const { id } = params;
 
-  const { setValue, reset, control, handleSubmit, getValues } = useForm();
+  const { setValue, reset, control, handleSubmit, getValues } = useForm({
+    resolver: yupResolver(schema),
+  });
   const [productImg, setProductImg] = useState(null);
   const [imgDesc, setImgDesc] = useState(null);
   const [image, setImage] = useState(null);
@@ -90,7 +99,7 @@ const EditProduct = () => {
         .catch((error) => console.log(error));
     }
     getProductId();
-  }, [id]);
+  }, [params.id]);
   useEffect(() => {
     const getCategory = async () => {
       const listCateogry = await categoryApi.getAll();
@@ -116,7 +125,17 @@ const EditProduct = () => {
     const file = e.target.files;
     setImgDesc(file);
   };
-  const handleRemoveImg = async (id) => {};
+  const handleRemoveImg = async (id) => {
+    await imageApi
+      .removeProductImg(id)
+      .then((res) => {
+        console.log(res);
+        setProductImg(productImg.filter((x) => x.id !== id));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   const onImgChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       let img = event.target.files[0];
@@ -140,7 +159,7 @@ const EditProduct = () => {
           bodyFormData.append("file", file);
           const response = await axios({
             method: "post",
-            url: "http://127.0.0.1:8000/api/img/upload",
+            url: "http://103.82.27.248/api/img/upload",
             data: bodyFormData,
             headers: {
               "Content-Type": "multipart/form-data",
@@ -161,10 +180,7 @@ const EditProduct = () => {
 
       data.append("file", image);
 
-      const img = await axios.post(
-        "http://127.0.0.1:8000/api/img/upload",
-        data
-      );
+      const img = await axios.post("http://103.82.27.248/api/img/upload", data);
       console.log(img);
       value.avatar = img?.data.file_path;
       // setValue("avatarOne", img?.data.file_path);
@@ -174,12 +190,12 @@ const EditProduct = () => {
       const data = new FormData();
 
       Array.from(imgDesc).forEach((img) => {
-        data.append("filen[]", img);
+        data.append("file[]", img);
       });
 
       const imgDes = await axios({
         method: "post",
-        url: "http://127.0.0.1:8000/api/img/uploads",
+        url: "http://103.82.27.248/api/img/uploads",
         data: data,
         headers: {
           "Content-Type": "multipart/form-data",

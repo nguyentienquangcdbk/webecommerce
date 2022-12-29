@@ -12,6 +12,9 @@ const imageApi = {
   delete(data) {
     return axiosClient.post(`/img/delete`, data);
   },
+  removeProductImg(id) {
+    return axiosClient.post("img/remove/" + id);
+  },
 };
 
 export default imageApi;

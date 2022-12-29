@@ -9,7 +9,7 @@ const SildeBar = ({ showSlibar, setShowSlibar }) => {
       } `}
     >
       <Link to="/" className="mb-10 flex items-center justify-center">
-        <img srcSet="./Logo.png 2x" alt="logo" />
+        <img srcSet="Logo.png 2x" alt="logo" />
       </Link>
       <div className="mt-10 flex flex-col gap-y-10">
         <NavLink

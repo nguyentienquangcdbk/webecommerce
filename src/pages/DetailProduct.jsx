@@ -20,7 +20,6 @@ const DetailProduct = () => {
   const [sliderImg, setSliderImg] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const listProduct = productStore((state) => state.listProduct);
-  // const Cart = useCart((state) => state.Cart);
   const user = useStore((state) => state.user);
   const updateCart = useCart((state) => state.updateCart);
   const [loading, setLoading] = useState(false);
