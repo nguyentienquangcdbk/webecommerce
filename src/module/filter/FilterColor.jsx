@@ -9,7 +9,7 @@ const listColor = [
   { value: "vàng", label: "vàng" },
   { value: "trắng", label: "trắng" },
   { value: "hồng", label: "hồng" },
-  { value: " nâu", label: " nâu" },
+  { value: "nâu", label: "nâu" },
   { value: "xám", label: "xám" },
   { value: "xanh da trời", label: "xanh da trời" },
 ];

@@ -1,13 +1,15 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useEffect } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as yup from "yup";
-import axiosClient from "../api/axiosClient";
 import Input from "../component/Input";
 import Label from "../component/Label";
-import { useStore } from "../store/auth";
+import { auth, db } from "../firebase-app/firebase-config";
+import { v4 as uuidv4 } from "uuid";
 
 const schema = yup.object({
   email: yup
@@ -30,29 +32,27 @@ const SIgnUp = () => {
     mode: "onSubmit",
   });
   const navigate = useNavigate();
-  const setUser = useStore((state) => state.setUser);
-  const user = useStore((state) => state.user);
-  useEffect(() => {
-    document.title = "đăng ký";
-    if (user) {
-      navigate("/");
-    }
-  }, []);
+  // const setUser = useStore((state) => state.setUser);
+  // const user = useStore((state) => state.user);
+  // useEffect(() => {
+  //   document.title = "đăng ký";
+  //   if (user) {
+  //     navigate("/");
+  //   }
+  // }, []);
+
   const handleSignUp = async (values) => {
     console.log(values);
-    await axiosClient
-      .post("register", values)
-      .then((res) => {
-        const user = res?.data?.user;
-        console.log(res);
-        setUser(user);
-        localStorage.setItem("token", res?.data?.token);
-        toast("đăng ký tài khoản thành công");
-        navigate("/");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    await createUserWithEmailAndPassword(auth, values.email, values.password);
+    await setDoc(doc(db, "users", auth.currentUser.uid), {
+      fullname: values.name,
+      email: values.email,
+      password: values.password,
+      cartId: uuidv4(),
+      role: 0,
+    });
+    toast("tạo user thành công");
+    navigate("/");
   };
 
   return (

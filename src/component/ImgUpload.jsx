@@ -1,7 +1,6 @@
+import { deleteObject, getStorage, ref } from "firebase/storage";
 import React, { Fragment } from "react";
-import { URLS } from "../utils";
 import imgUpload from "../img/img-upload.png";
-import imageApi from "../api/imageApi";
 const ImgUpload = (props) => {
   const {
     images,
@@ -10,16 +9,20 @@ const ImgUpload = (props) => {
     name = "",
   } = props;
 
-  const handleRemoveImg = async (x) => {
-    await imageApi
-      .delete({ name: images })
-      .then((res) => {
-        console.log(res);
-        setImages(null);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const handleRemoveImg = (name) => {
+    setImages("");
+    // const storage = getStorage();
+    // const imageRef = ref(storage, "images/" + name);
+    // deleteObject(imageRef)
+    //   .then(() => {
+    //     console.log("Remove image successfully");
+    //     setImages("");
+    //   })
+    //   .catch((error) => {
+    //     console.log("handleDeleteImage ~ error", error);
+    //     console.log("Can not delete image");
+    //     setImages("");
+    //   });
   };
   return (
     <Fragment>
@@ -27,7 +30,7 @@ const ImgUpload = (props) => {
         {images ? (
           <>
             <div
-              onClick={() => handleRemoveImg(images)}
+              onClick={() => handleRemoveImg(images.name)}
               className="absolute z-2 top-1/2 left-1/2 opacity-0 group-hover:opacity-100 -translate-x-1/2 -translate-y-1/2 text-red-400 w-14 h-14 rounded-full bg-white  flex items-center justify-center"
             >
               <svg
@@ -47,11 +50,7 @@ const ImgUpload = (props) => {
             </div>
             <label htmlFor={name}>
               <img
-                src={
-                  typeof images === "string"
-                    ? URLS + images
-                    : URL.createObjectURL(images)
-                }
+                src={images.path}
                 className="w-full h-full object-contain"
                 alt=""
               />

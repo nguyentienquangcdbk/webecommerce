@@ -1,14 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { URLS } from "../utils";
 const BoxProduct = ({ item, props }) => {
-  // console.log(item);
   return (
     <div className="box mb-5 h-[450px]">
       <div className="relative rounded-lg  w-full h-[260px] mb-5 overflow-hidden">
         <img
           className="w-full rounded-lg h-full object-cover absolute inset-0  tran hover:scale-150"
-          src={URLS + item?.avatar}
+          src={item.ImgPath}
           alt=""
         />
       </div>

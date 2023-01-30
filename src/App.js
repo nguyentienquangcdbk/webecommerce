@@ -1,12 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import AdminLayout from "./layout/AdminLayout";
 import HomeLayout from "./layout/HomeLayout";
-import AddNewProduct from "./pages/auth/AddNewProduct";
-import AddNewCateogry from "./pages/auth/category/AddNewCateogry";
-import EditCategory from "./pages/auth/category/EditCategory";
-import ListCateogry from "./pages/auth/category/ListCateogry";
-import EditProduct from "./pages/auth/EditProduct";
-import ListProduct from "./pages/auth/ListProduct";
+
 import DetailProduct from "./pages/DetailProduct";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
@@ -14,35 +9,40 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import { useEffect } from "react";
 import { useStore } from "./store/auth";
-import axiosClient from "./api/axiosClient";
 import Cart from "./pages/Cart";
-import { useCart } from "./store/cart";
 import CheackOut from "./pages/CheackOut";
-import OrderAuth from "./pages/auth/order/OrderAuth";
-import DetailOrder from "./pages/auth/order/DetailOrder";
-import HomeAdmin from "./pages/auth/HomeAdmin";
-function App() {
-  const user = useStore((state) => state.user);
-  const setUser = useStore((state) => state.setUser);
 
-  const setItemCart = useCart((state) => state.setItemCart);
+// import HomeAdmin from "./pages/auth/HomeAdmin";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth, db } from "./firebase-app/firebase-config";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { useCart } from "./store/cart";
+function App() {
+  const setUser = useStore((state) => state.setUser);
+  // const user = useStore((state) => state.user);
+  const itemCart = useCart((state) => state.itemCart);
   useEffect(() => {
-    if (!user) {
-      const token = localStorage.getItem("token");
-      if (token) {
-        axiosClient
-          .get("/me")
-          .then((data) => {
-            console.log(data);
-            setUser(data?.data.user);
-            setItemCart(data?.data?.user.cart.items);
-          })
-          .catch((error) => {
-            console.log(error);
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const docRef = query(
+          collection(db, "users"),
+          where("email", "==", user.email)
+        );
+        onSnapshot(docRef, (snapshot) => {
+          snapshot.forEach((doc) => {
+            setUser({
+              ...user,
+              ...doc.data(),
+            });
           });
+        });
+
+        // console.log(user?.role);
+      } else {
+        setUser(null);
       }
-    }
-  }, []);
+    });
+  }, [itemCart]);
 
   return (
     <div className="App">
@@ -59,35 +59,7 @@ function App() {
           <Route path="/cart" element={<Cart></Cart>}></Route>
           <Route path="/checkout" element={<CheackOut></CheackOut>}></Route>
         </Route>
-        <Route element={<AdminLayout></AdminLayout>}>
-          <Route path="/admin" element={<HomeAdmin></HomeAdmin>} />
-          <Route path="/admin/product" element={<ListProduct></ListProduct>} />
-          <Route path="/admin/order" element={<OrderAuth></OrderAuth>} />
-          <Route
-            path="/admin/order/edit/:id"
-            element={<DetailOrder></DetailOrder>}
-          />
-          <Route
-            path="/admin/product/add"
-            element={<AddNewProduct></AddNewProduct>}
-          />
-          <Route
-            path="/admin/product/edit/:id"
-            element={<EditProduct></EditProduct>}
-          />
-          <Route
-            path="/admin/category"
-            element={<ListCateogry></ListCateogry>}
-          />
-          <Route
-            path="/admin/category/add"
-            element={<AddNewCateogry></AddNewCateogry>}
-          />
-          <Route
-            path="/admin/category/edit/:id"
-            element={<EditCategory></EditCategory>}
-          />
-        </Route>
+        <Route path="/admin" element={<AdminLayout></AdminLayout>}></Route>
       </Routes>
     </div>
   );

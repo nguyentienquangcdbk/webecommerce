@@ -1,12 +1,12 @@
 import axios from "axios";
 
-const getToken = () => localStorage.getItem("token");
+// const getToken = () => localStorage.getItem("token");
 const axiosClient = axios.create({
-  baseURL: "http://103.82.27.248/api/",
+  baseURL: "https://dbshopjson-w3pz.vercel.app/",
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
-    Authorization: `Bearer ${getToken()}`,
+    // Authorization: `Bearer ${getToken()}`,
   },
 });
 

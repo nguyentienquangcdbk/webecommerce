@@ -1,23 +1,10 @@
 import React, { useEffect, useState } from "react";
-import categoryApi from "../../api/categoryApi";
 import CheckBox from "../../component/CheckBox";
 
+const categories = ["adidas", "vanz", "Nike", "Puma"];
 const FilterCategory = ({ filter, onChange = () => {} }) => {
-  const [categories, setCategories] = useState([]);
+  // const [categories, setCategories] = useState([]);
   const [categoryIds, setCategoryIds] = useState([]);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await categoryApi.getAll();
-
-        setCategories(response?.data);
-      } catch {
-        console.log("error");
-      }
-    })();
-  }, []);
-
   const handleCategory = (id) => {
     console.log(id);
     setCategoryIds((prev) => {
@@ -38,10 +25,10 @@ const FilterCategory = ({ filter, onChange = () => {} }) => {
         {categories.map((item, index) => (
           <CheckBox
             key={item.id}
-            checked={categoryIds.includes(item.name)}
-            onClick={() => handleCategory(item.name)}
+            checked={categoryIds.includes(item)}
+            onClick={() => handleCategory(item)}
           >
-            {item.name}
+            {item}
           </CheckBox>
         ))}
       </div>

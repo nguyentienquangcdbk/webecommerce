@@ -9,6 +9,8 @@ import axiosClient from "../api/axiosClient";
 import { toast } from "react-toastify";
 import { useStore } from "../store/auth";
 import { useCart } from "../store/cart";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase-app/firebase-config";
 
 const schema = yup.object({
   email: yup
@@ -22,8 +24,7 @@ const schema = yup.object({
 });
 const SignIn = () => {
   const navigate = useNavigate();
-  const setUser = useStore((state) => state.setUser);
-  const setItemCart = useCart((state) => state.setItemCart);
+
   const user = useStore((state) => state.user);
   const {
     control,
@@ -43,28 +44,14 @@ const SignIn = () => {
 
   const handleSignIn = async (values) => {
     if (!isValid) return;
-    console.log(values);
-    await axiosClient
-      .post("login", values)
-      .then((res) => {
-        console.log(res);
-        const user = res?.data?.user;
-        // const cart = res?.data?.cart;
-        if (res?.data?.status === 401) {
-          toast.error("đăng nhập không thành công");
-        } else {
-          setUser(user);
-          setItemCart(user?.cart.items);
-          localStorage.setItem("token", res?.data?.token);
-          toast("đăng nhập thành công");
-          navigate("/");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    try {
+      await signInWithEmailAndPassword(auth, values.email, values.password);
+      navigate("/");
+    } catch (error) {
+      if (error.message.includes("wrong-password"))
+        toast.error("It seems your password was wrong");
+    }
   };
-
   return (
     <div className="mx-auto container">
       <div className="mt-10">

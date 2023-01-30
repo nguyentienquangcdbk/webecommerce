@@ -1,70 +1,63 @@
 import React, { useEffect, useState } from "react";
-// import CheckBox from "../component/CheckBox";
+import productAPi from "../api/productAPi";
 import BoxProduct from "../module/BoxProduct";
 import FilterCategory from "../module/filter/FilterCategory";
-import FilterColor from "../module/filter/FilterColor";
 import FilterSize from "../module/filter/FilterSize";
-import productAPi from "../api/productAPi";
+import FilterColor from "../module/filter/FilterColor";
 import ReactPaginate from "react-paginate";
+
+const POST_PER_PAGE = 8;
 const Products = () => {
   document.title = "danh sách sản phẩm";
   const [showFilter, setShowFilter] = useState(false);
-  // const [sort, setSort] = useState("DESC");
+
   const [loading, setLoading] = useState(false);
-  const [lastPage, setLastPage] = useState(null);
+  const [sort, setSort] = useState("DESC");
+  const [pageCount, setPageCount] = useState(1);
   const [page, setPage] = useState(1);
+  // const [page, setPage] = useState(1);
+
   const [filters, setFilters] = useState({
     color: [],
     size: [],
     category: [],
-    page: 1,
+    _page: 1,
   });
   const [filterProductList, setFilterProductList] = useState([]);
 
   useEffect(() => {
-    (async () => {
+    async function fetchData() {
       setLoading(true);
-      try {
-        const res = await productAPi.getAll({
-          category: filters.category,
-          color: filters.color,
-          size: filters.size,
-          time: filters.time,
-          page: page,
-        });
-        console.log(res);
-        // if (res?.data.count === 1) {
-        //   setFilterProductList(res?.data.data);
-        // } else {
-        if (typeof res?.data.data === "object") {
-          const arrListProduct = Object.values(res?.data.data);
-          setFilterProductList(arrListProduct);
-        } else {
-          setFilterProductList(res?.data);
-        }
-        // }
-        setLastPage(res?.data?.last_page);
-        setLoading(false);
-      } catch {
-        console.log("error");
-        setLoading(false);
-      }
-    })();
-    console.log(filters);
-  }, [filters, page]);
-
-  const handleSort = (e) => {
-    console.log(e);
-    if (e === filters.time) {
-      return;
-    } else {
-      setFilters({
-        ...filters,
-        time: e,
+      const products = await productAPi.getAll({
+        categoryName: filters.category,
+        color: filters.color,
+        size: filters.size,
+        _sort: "price",
+        _order: sort,
+        _page: page,
+        _limit: POST_PER_PAGE,
       });
+
+      setFilterProductList(products.data);
+      setLoading(false);
     }
-    console.log(e);
-  };
+    fetchData();
+  }, [sort, filters, page]);
+  useEffect(() => {
+    async function fetchData() {
+      const products = await productAPi.getAll({
+        categoryName: filters.category,
+        color: filters.color,
+        size: filters.size,
+      });
+      const totalProduct = products?.data.length;
+      setPageCount(Math.ceil(totalProduct / 8));
+
+      // setFilterProductList(products.data);
+    }
+    fetchData();
+  }, [sort, filters, page]);
+  console.log(filterProductList);
 
   const handleFilterCategory = (category) => {
     setFilters({
@@ -73,6 +66,7 @@ const Products = () => {
     });
     setPage(1);
   };
+
   const handleFilterColor = (colors) => {
     setFilters({
       ...filters,
@@ -121,7 +115,7 @@ const Products = () => {
             </svg>
           </span>
           <FilterCategory onChange={handleFilterCategory} />
-          <FilterSize onchange={handleFilterSize}></FilterSize>
+          {/* <FilterSize onchange={handleFilterSize}></FilterSize> */}
           <FilterColor onchange={handleFilterColor}></FilterColor>
         </div>
         <div className="w-full">
@@ -132,13 +126,36 @@ const Products = () => {
             >
               bộ lọc
             </button>
+
+            <div className="flex">
+              <button
+                className={`${
+                  sort === "DESC"
+                    ? "bg-green-400 text-white"
+                    : "text-black bg-white"
+                } px-2 py-1  border-2 border-green-400 `}
+                onClick={() => setSort("DESC")}
+              >
+                giảm dần theo giá
+              </button>
+              <button
+                onClick={() => setSort("ASC")}
+                className={`${
+                  sort === "ASC"
+                    ? "bg-green-400 text-white"
+                    : "text-black bg-white"
+                } px-2 py-1  border-2 border-green-400 `}
+              >
+                tăng dần theo giá
+              </button>
+            </div>
           </div>
           {loading ? (
             <div className="w-10 h-10 animate-spin mx-auto mt-5 border-8 border-green-500 border-t-transparent rounded-full"></div>
           ) : (
             <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-x-5">
               {filterProductList?.length > 0 &&
-                filterProductList?.map((item, index) => (
+                filterProductList.map((item, index) => (
                   <BoxProduct key={index} item={item}></BoxProduct>
                 ))}
             </div>
@@ -156,10 +173,9 @@ const Products = () => {
               className="flex gap-x-3 items-center "
               pageRangeDisplayed={2}
               forcePage={page - 1}
-              pageCount={lastPage}
+              pageCount={pageCount}
               pageClassName="w-10 h-10 flex justify-center items-center hover:bg-green-400 rounded-full"
               activeClassName="bg-green-300 text-white"
-              // onPageActive={1}
               previousLabel="<"
               renderOnZeroPageCount={null}
             />

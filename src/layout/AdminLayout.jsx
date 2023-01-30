@@ -59,6 +59,7 @@ const AdminLayout = () => {
             </div>
           </header>
           <div className=" w-full bg-white   py-5 px-0 md:px-5 lg:px-10">
+            chào mừng bạn đến với trang admin
             <Outlet></Outlet>
           </div>
         </div>
