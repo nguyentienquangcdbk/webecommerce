@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CheckBox from "../../component/CheckBox";
 
-const categories = ["adidas", "vanz", "Nike", "Puma"];
+const categories = ["adidas", "vanz", "Nike", "Puma", "MLB"];
 const FilterCategory = ({ filter, onChange = () => {} }) => {
   // const [categories, setCategories] = useState([]);
   const [categoryIds, setCategoryIds] = useState([]);

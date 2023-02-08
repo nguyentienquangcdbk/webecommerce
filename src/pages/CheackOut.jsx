@@ -145,7 +145,7 @@ const CheackOut = () => {
                 onChange={handleTp}
                 value={getValues("tp")}
                 className="mt-5 border  rounded-lg"
-                // {...register("tp")}
+               
                 placeholder="Tỉnh thành"
                 options={city}
               />

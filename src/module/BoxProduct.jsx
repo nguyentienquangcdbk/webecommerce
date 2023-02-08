@@ -12,7 +12,7 @@ const BoxProduct = ({ item, props }) => {
       </div>
       <Link
         to={`/products/${item?.id}`}
-        className="text-lg css-name-product font-semibold  max-h-[60px] h-[60px] block overflow-hidden text-ellipsis"
+        className="text-base css-name-product font-semibold  max-h-[60px] h-[60px] block overflow-hidden text-ellipsis"
       >
         {item?.name}
       </Link>
@@ -26,12 +26,12 @@ const BoxProduct = ({ item, props }) => {
             }).format(item?.price)}
           </span>{" "}
         </p>
-        <Link
+        {/* <Link
           to={`/products/${item?.id}`}
           className="bg-green-500  text-white px-4 py-3 rounded-lg text-xl hover:bg-green-600"
         >
           xem chi tiết
-        </Link>
+        </Link> */}
       </div>
     </div>
   );

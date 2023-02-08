@@ -5,18 +5,10 @@ import polyCard from "../asset/polycard";
 import PolyCart from "../module/PolyCart";
 import banner from "../img/banner.png";
 import { useEffect } from "react";
-import {
-  collection,
-  limit,
-  onSnapshot,
-  orderBy,
-  query,
-} from "firebase/firestore";
-import { db } from "../firebase-app/firebase-config";
+
 import { useState } from "react";
-import { async } from "@firebase/util";
-import { productStore } from "../store/product";
 import productAPi from "../api/productAPi";
+import BannerSilder from "../module/BannerSilder";
 const Home = () => {
   document.title = "trang chủ";
   const [listProduct, setListProduct] = useState([]);
@@ -33,9 +25,7 @@ const Home = () => {
 
   return (
     <div className="">
-      <div className="banner w-full h-[40vh] lg:h-[80vh] mb-10">
-        <img className="w-full h-full object-cover" src={banner} alt="" />
-      </div>
+      <BannerSilder />
 
       <div className="container mx-auto mb-10 ">
         <div className=" grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-12 sm:px-0 gap-x-5 gap-y-5">
