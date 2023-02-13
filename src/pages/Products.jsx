@@ -46,14 +46,15 @@ const Products = () => {
   useEffect(() => {
     async function fetchData() {
       const products = await productAPi.getAll({
-        categoryName: searchParam.category,
+        categoryName: searchParam.categoryName,
         color: searchParam.color,
       });
+      // console.log(products);
       const totalProduct = products?.data.length;
       setPageCount(Math.ceil(totalProduct / 8));
     }
     fetchData();
-  }, [sort, location.search]);
+  }, [location.search]);
 
   const handleFilterCategory = (category) => {
     setSearchParams({
