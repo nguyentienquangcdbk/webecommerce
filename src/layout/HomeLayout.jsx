@@ -1,11 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import { toast } from "react-toastify";
-import { auth, db } from "../firebase-app/firebase-config";
-import { signOut } from "firebase/auth";
-import { useStore } from "../store/auth";
 import { useCart } from "../store/cart";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { CartIcon, NavIcon, Search, User } from "../icon";
 import Footer from "./Footer";
 
@@ -30,42 +25,8 @@ const listMenu = [
 
 const HomeLayout = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
-  const user = useStore((state) => state.user);
-  const setItemCart = useCart((state) => state.setItemCart);
   const itemCart = useCart((state) => state.itemCart);
 
-  const handleLogOut = async () => {
-    await signOut(auth)
-      .then(() => {
-        toast("logout");
-      })
-      .catch((error) => {
-        toast.error("lỗi rồi");
-      });
-  };
-  useEffect(() => {
-    console.log("ngoai if");
-    if (user) {
-      console.log("in if");
-
-      const q = query(
-        collection(db, "ItemCart"),
-        where("cartId", "==", user?.cartId)
-      );
-      onSnapshot(q, (snapshot) => {
-        const results = [];
-        snapshot.forEach((doc) => {
-          results.push({
-            id: doc.id,
-            ...doc.data(),
-          });
-        });
-        console.log(results);
-        setItemCart(results);
-      });
-    }
-  }, []);
-  console.log(itemCart);
   return (
     <div className="w-full">
       <header className="container mx-auto">
@@ -98,7 +59,7 @@ const HomeLayout = () => {
               <Search />
             </div>
             <Link
-              to={user ? "/cart" : "/sign-in"}
+              to={"/cart"}
               className="cart hover:text-green-400 cursor-pointer relative"
             >
               <CartIcon />
@@ -111,31 +72,13 @@ const HomeLayout = () => {
               )}
             </Link>
 
-            {!user ? (
-              <Link
-                to="/sign-in"
-                className="auth hover:text-green-400 cursor-pointer"
-              >
-                <User />
-              </Link>
-            ) : (
-              <>
-                <span
-                  onClick={handleLogOut}
-                  className="text-gray-400 font-xl cursor-pointer hover:text-green-400"
-                >
-                  logout
-                </span>
-                {user?.role === 1 && (
-                  <Link
-                    to="/admin"
-                    className="px-3 py-1 rounded-lg bg-violet-500 text-white text-lg"
-                  >
-                    admin
-                  </Link>
-                )}
-              </>
-            )}
+            <Link
+              to="/sign-in"
+              className="auth hover:text-green-400 cursor-pointer"
+            >
+              <User />
+            </Link>
+
             <div
               onClick={() => setToggleMenu(!toggleMenu)}
               className="bar block lg:hidden hover:text-green-400 cursor-pointer"

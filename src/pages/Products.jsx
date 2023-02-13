@@ -13,7 +13,6 @@ const Products = () => {
   let [searchParams, setSearchParams] = useSearchParams();
   document.title = "danh sách sản phẩm";
   const [showFilter, setShowFilter] = useState(false);
-
   const [loading, setLoading] = useState(false);
   const [sort, setSort] = useState("DESC");
   const [pageCount, setPageCount] = useState(1);
@@ -24,6 +23,7 @@ const Products = () => {
     let params = queryString.parse(location.search);
     return {
       ...params,
+      _page: Number(params._page) || 1,
       _sort: "price",
     };
   }, [location.search]);
@@ -34,11 +34,10 @@ const Products = () => {
       console.log(searchParam);
       const products = await productAPi.getAll({
         ...searchParam,
-        _page: page,
+        _page: searchParam._page || 1,
         _order: sort,
         _limit: POST_PER_PAGE,
       });
-
       setFilterProductList(products.data);
       setLoading(false);
     }
@@ -47,7 +46,8 @@ const Products = () => {
   useEffect(() => {
     async function fetchData() {
       const products = await productAPi.getAll({
-        ...searchParam,
+        categoryName: searchParam.category,
+        color: searchParam.color,
       });
       const totalProduct = products?.data.length;
       setPageCount(Math.ceil(totalProduct / 8));
@@ -59,8 +59,9 @@ const Products = () => {
     setSearchParams({
       ...searchParam,
       categoryName: category,
+      _page: 1,
     });
-    setPage(1);
+    // setPage(1);
   };
 
   const handleFilterColor = (colors) => {
@@ -69,11 +70,16 @@ const Products = () => {
       color: colors,
       _page: 1,
     });
-    setPage(1);
+    // setPage(1);
   };
 
   const handlePageClick = (x) => {
-    setPage(x.selected + 1);
+    // console.log(x);
+    // setPage(x.selected + 1);
+    setSearchParams({
+      ...searchParam,
+      _page: x.selected + 1,
+    });
   };
 
   return (
@@ -164,9 +170,9 @@ const Products = () => {
               breakLabel="..."
               nextLabel=" >"
               onPageChange={handlePageClick}
-              className="flex gap-x-3 items-center "
+              className="flex gap-x-3 items-center select-none "
               pageRangeDisplayed={2}
-              forcePage={page - 1}
+              forcePage={searchParam._page - 1}
               pageCount={pageCount}
               pageClassName="w-10 h-10 flex justify-center items-center hover:bg-green-400 rounded-full"
               activeClassName="bg-green-300 text-white"

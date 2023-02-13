@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import Input from "../component/Input";
 import { useCart } from "../store/cart";
 import Select from "react-select";
-// import { URLS } from "../utils";
 import { city } from "../asset/tp";
 import { District } from "../asset/District";
 import { ward } from "../asset/wards";
@@ -13,15 +12,6 @@ import { useStore } from "../store/auth";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { v4 as uuidv4 } from "uuid";
-import {
-  addDoc,
-  collection,
-  doc,
-  serverTimestamp,
-  updateDoc,
-} from "firebase/firestore";
-import { db } from "../firebase-app/firebase-config";
 
 const sdtRegExp = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
 const schema = yup.object({
@@ -38,8 +28,7 @@ const schema = yup.object({
 });
 const CheackOut = () => {
   const itemCart = useCart((state) => state.itemCart);
-  // const updateCart = useCart((state) => state.updateCart);
-  // const updateUser = useStore((state) => state.updateUser);
+
   const setItemCart = useCart((state) => state.setItemCart);
   const user = useStore((state) => state.user);
   const [district, setDistrict] = useState(null);
@@ -83,25 +72,7 @@ const CheackOut = () => {
     });
   };
   const handleOrder = async (value) => {
-    value.path_with_type = wardsValue.path_with_type;
-    value.products = JSON.stringify(itemCart);
-    if (!user?.cartId) {
-      toast.error("tạo đơn hàng thất bại");
-      return;
-    }
-    value.user = user?.uid;
-    value.totalPrice = total;
-    console.log(value);
-
-    // const res = await orderAPi.add(value);
-    await addDoc(collection(db, "order"), {
-      ...value,
-      createdAt: serverTimestamp(),
-    });
-    const docRef = doc(db, "users", user.uid);
-    await updateDoc(docRef, {
-      cartId: uuidv4(),
-    });
+    toast("bạn đã đặt hàng thành công");
     setItemCart(null);
     navigate("/");
   };
@@ -145,7 +116,6 @@ const CheackOut = () => {
                 onChange={handleTp}
                 value={getValues("tp")}
                 className="mt-5 border  rounded-lg"
-               
                 placeholder="Tỉnh thành"
                 options={city}
               />

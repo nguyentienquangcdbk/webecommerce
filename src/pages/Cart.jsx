@@ -4,13 +4,13 @@ import { useCart } from "../store/cart";
 import noCart from "../img/no-cart.png";
 import { Link } from "react-router-dom";
 import { Remove } from "../icon";
+
 const Cart = () => {
   document.title = "giỏ hàng";
   const itemCart = useCart((state) => state.itemCart);
   const decrementAnItem = useCart((state) => state.decrementAnItem);
   const incrementByAmount = useCart((state) => state.incrementByAmount);
   const removeCart = useCart((state) => state.removeCart);
-  // const updateCart = useCart((state) => state.updateCart);
   const counter = useCart((state) => state.counter);
 
   const quantity = itemCart?.reduce((result, prod) => {

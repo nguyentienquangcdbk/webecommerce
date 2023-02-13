@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import BoxProduct from "../module/BoxProduct";
 import parse from "html-react-parser";
 import { useCart } from "../store/cart";
-
 import productAPi from "../api/productAPi";
 
 const DetailProduct = () => {
@@ -12,9 +11,7 @@ const DetailProduct = () => {
   const [listProducts, setListProducts] = useState(null);
   const addToCart = useCart((state) => state.addToCart);
   const [quantity, setQuantity] = useState(1);
-  // const updateCart = useCart((state) => state.updateCart);
   const [loading, setLoading] = useState(false);
-  // const [disabled, setDisabled] = useState(false);
   const [item, setItem] = useState(null);
 
   useEffect(() => {
@@ -28,10 +25,10 @@ const DetailProduct = () => {
     })();
     document.title = "chi tiết sản phẩm";
   }, [param.id]);
+
   useEffect(() => {
     const getProduct = async () => {
       const products = await productAPi.getAll({ _page: 1, _limit: 3 });
-      console.log(products);
       setListProducts(products.data);
     };
     getProduct();
@@ -55,7 +52,6 @@ const DetailProduct = () => {
   };
 
   const addToCarts = async () => {
-    // setDisabled(true);
     const checks = check();
     if (checks) {
       let newItem = {
@@ -68,7 +64,6 @@ const DetailProduct = () => {
       };
       addToCart(newItem);
     }
-    // console.log(Cart);
   };
   return (
     <>

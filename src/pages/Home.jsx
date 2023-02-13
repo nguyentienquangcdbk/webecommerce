@@ -21,7 +21,6 @@ const Home = () => {
     };
     getProduct();
   }, []);
-  // const listProduct = productStore((state) => state.listProduct);
 
   return (
     <div className="">
