@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 const BoxProduct = ({ item, props }) => {
   return (
-    <div className="box mb-5 h-[450px]">
+    <div className="box mb-5 h-[450px] shadow-xl rounded-lg">
       <div className="relative rounded-lg  w-full h-[260px] mb-5 overflow-hidden">
         <img
           className="w-full rounded-lg h-full object-cover absolute inset-0  tran hover:scale-150"
@@ -12,7 +12,7 @@ const BoxProduct = ({ item, props }) => {
       </div>
       <Link
         to={`/products/${item?.id}`}
-        className="text-base css-name-product font-semibold  max-h-[60px] h-[60px] block overflow-hidden text-ellipsis"
+        className="text-base css-name-product font-semibold  max-h-[70px] h-[70px] block overflow-hidden text-ellipsis"
       >
         {item?.name}
       </Link>

@@ -13,7 +13,7 @@ const listColor = [
   { value: "xám", label: "xám" },
   { value: "xanh da trời", label: "xanh da trời" },
 ];
-const FilterColor = ({ filter, onchange = () => {} }) => {
+const FilterColor = ({ filters = [], onchange = () => {} }) => {
   const [colors, setColors] = useState([]);
   const hanldeChangeColor = (color) => {
     setColors((prev) => {

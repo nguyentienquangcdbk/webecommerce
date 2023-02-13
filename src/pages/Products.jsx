@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import productAPi from "../api/productAPi";
 import BoxProduct from "../module/BoxProduct";
 import FilterCategory from "../module/filter/FilterCategory";
-import FilterSize from "../module/filter/FilterSize";
 import FilterColor from "../module/filter/FilterColor";
 import ReactPaginate from "react-paginate";
+import { useLocation, useSearchParams } from "react-router-dom";
+import queryString from "query-string";
 
 const POST_PER_PAGE = 8;
 const Products = () => {
+  const location = useLocation();
+  let [searchParams, setSearchParams] = useSearchParams();
   document.title = "danh sách sản phẩm";
   const [showFilter, setShowFilter] = useState(false);
 
@@ -15,26 +18,24 @@ const Products = () => {
   const [sort, setSort] = useState("DESC");
   const [pageCount, setPageCount] = useState(1);
   const [page, setPage] = useState(1);
-  // const [page, setPage] = useState(1);
 
-  const [filters, setFilters] = useState({
-    color: [],
-    size: [],
-    category: [],
-    _page: 1,
-  });
   const [filterProductList, setFilterProductList] = useState([]);
+  const searchParam = useMemo(() => {
+    let params = queryString.parse(location.search);
+    return {
+      ...params,
+      _sort: "price",
+    };
+  }, [location.search]);
 
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
+      console.log(searchParam);
       const products = await productAPi.getAll({
-        categoryName: filters.category,
-        color: filters.color,
-        size: filters.size,
-        _sort: "price",
-        _order: sort,
+        ...searchParam,
         _page: page,
+        _order: sort,
         _limit: POST_PER_PAGE,
       });
 
@@ -42,43 +43,31 @@ const Products = () => {
       setLoading(false);
     }
     fetchData();
-  }, [sort, filters, page]);
+  }, [location.search, sort]);
   useEffect(() => {
     async function fetchData() {
       const products = await productAPi.getAll({
-        categoryName: filters.category,
-        color: filters.color,
-        size: filters.size,
+        ...searchParam,
       });
       const totalProduct = products?.data.length;
       setPageCount(Math.ceil(totalProduct / 8));
-
-      // setFilterProductList(products.data);
     }
     fetchData();
-  }, [sort, filters, page]);
-  console.log(filterProductList);
+  }, [sort, location.search]);
 
   const handleFilterCategory = (category) => {
-    setFilters({
-      ...filters,
-      category: category,
+    setSearchParams({
+      ...searchParam,
+      categoryName: category,
     });
     setPage(1);
   };
 
   const handleFilterColor = (colors) => {
-    setFilters({
-      ...filters,
+    setSearchParams({
+      ...searchParam,
       color: colors,
-    });
-    setPage(1);
-  };
-
-  const handleFilterSize = (size) => {
-    setFilters({
-      ...filters,
-      size: size,
+      _page: 1,
     });
     setPage(1);
   };
@@ -114,9 +103,14 @@ const Products = () => {
               />
             </svg>
           </span>
-          <FilterCategory onChange={handleFilterCategory} />
-          {/* <FilterSize onchange={handleFilterSize}></FilterSize> */}
-          <FilterColor onchange={handleFilterColor}></FilterColor>
+          <FilterCategory
+            filters={searchParam.categoryName}
+            onChange={handleFilterCategory}
+          />
+          <FilterColor
+            filters={searchParam.color}
+            onchange={handleFilterColor}
+          ></FilterColor>
         </div>
         <div className="w-full">
           <div className="flex items-center justify-between mb-10">

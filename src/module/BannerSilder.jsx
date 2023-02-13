@@ -38,7 +38,7 @@ const BannerSilder = () => {
   };
 
   return (
-    <div className="banner w-full h-[40vh] lg:h-[80vh] rounded-2xl mb-10 relative overflow-hidden">
+    <div className="banner w-full h-[40vh] md:h-[80vh] rounded-2xl mb-10 relative overflow-hidden">
       <div className="absolute inset-0">
         {apiSilder.map((item, index) => (
           <img
@@ -55,13 +55,13 @@ const BannerSilder = () => {
       </div>
       <div
         onClick={prevSlide}
-        className="absolute top-1/2 -translate-y-1/2 text-2xl text-white left-5 cursor-pointer"
+        className="absolute top-1/2 -translate-y-1/2 text-white left-5 cursor-pointer"
       >
         <Prev />
       </div>
       <div
         onClick={nextSlide}
-        className="absolute top-1/2 -translate-y-1/2 text-2xl text-white right-5 cursor-pointer"
+        className="absolute top-1/2 -translate-y-1/2 text-white right-5 cursor-pointer"
       >
         <Next />
       </div>

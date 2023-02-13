@@ -28,7 +28,7 @@ const Home = () => {
       <BannerSilder />
 
       <div className="container mx-auto mb-10 ">
-        <div className=" grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-12 sm:px-0 gap-x-5 gap-y-5">
+        <div className=" flex flex-wrap justify-center px-12 sm:px-0 gap-x-5 gap-y-5">
           {polyCard.map((item, index) => (
             <PolyCart
               name={item.name}
@@ -37,6 +37,24 @@ const Home = () => {
               key={index}
             />
           ))}
+        </div>
+      </div>
+
+      <div className=" container flex flex-col md:flex-row gap-x-5 mx-auto mt-10">
+        <div className="w-full md:w-[50%] p-5">
+          <img
+            src="https://theme.hstatic.net/200000306687/1000886682/14/home_about_bot.png?v=104"
+            className="w-full object-cover rounded-lg"
+            alt=""
+          />
+        </div>
+        <div className="w-full md:w-[50%] p-5">
+          <h1 className="text-5xl mb-5 font-semibold">Phong cách của bạn</h1>
+          <p className="text-gray-400 text-base">
+            Mở khóa phong cách và doanh số bán hàng độc quyền, giảm sản phẩm và
+            những lần hợp tác mới nhất của chúng tôi với cộng đồng Converse -
+            tất cả đều được gửi thẳng đến hộp thư đến của bạn.
+          </p>
         </div>
       </div>
 
